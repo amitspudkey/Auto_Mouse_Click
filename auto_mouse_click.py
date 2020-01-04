@@ -8,8 +8,8 @@ def main():
     print("Sleeping for 5s")
     time.sleep(5)
 
-    clicks = 500
-    seconds = 60
+    clicks = 50
+    seconds = 15
 
     auto_click_num(clicks)
     print()
@@ -25,17 +25,22 @@ def auto_click_time(number_of_seconds: int):
     start_time = time.time()
     clicks = 0
     last_print_time = start_time
+    if number_of_seconds < 120:
+        time_for_print_statement = number_of_seconds / 10
+    else:
+        time_for_print_statement = 10
     while time.time() - start_time < number_of_seconds:
         pyautogui.click()
         clicks = clicks + 1
         # if round(time.time() - start_time, 0) % 10 == 0:
-        if round(time.time() - last_print_time, 1) >= 10:
+        if round(time.time() - last_print_time, 1) >= time_for_print_statement:
             last_print_time = time.time()
-            print(str(round(time.time() - start_time, 0)) + "s completed. " +
+            print(str(chop_microseconds(datetime.timedelta(seconds=time.time() - start_time))) + "s completed. " +
                   str(chop_microseconds(datetime.timedelta(seconds=number_of_seconds - (time.time() - start_time)))) +
                   " remaining. CPS: " + str(round(clicks / (time.time() - start_time), 2)) +
                   " Estimated number of clicks remaining: " +
-                  str(round((clicks / (time.time() - start_time)) * (number_of_seconds - (time.time() - start_time)), 0)))
+                  str(round((clicks / (time.time() - start_time)) * (number_of_seconds -
+                                                                     (time.time() - start_time)), 0)))
 
     print("Process Completed. " + str(clicks) + " clicks completed in " +
           str(chop_microseconds(datetime.timedelta(seconds=number_of_seconds))) + ".")
